@@ -11,7 +11,7 @@ LAV transforms raw waveforms into sequences of dynamically-fitted B-spline segme
 - **Neural audio pipelines** (tokenizers, transformers, generative models)
 - **Real-time streaming** (low-latency, chunk-based processing)
 - **Compact storage** (binary `.lav` files storing spline parameters)
-- **High-fidelity reconstruction** back to PCM audio
+- **Near-Hi-Fi, reconstruction** back to PCM audio
 
 ## Installation
 
