@@ -1,3 +1,5 @@
+![LAV Banner](https://github.com/Mischlichter/LAV-AUDIO-CODEC/raw/main/banner.png)
+
 # LAV Audio Codec
 
 A Near-Hi-Fi, temporally-precise audio format and toolkit for encoding and decoding audio as **Latent Audio Vectors** (`.lav`), plus a simple playback CLI.
