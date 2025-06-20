@@ -1,0 +1,176 @@
+=== LATENT AUDIO VECTOR FORMAT SPECIFICATION (LAV) ===
+
+Overview:
+The LAV format (Latent Audio Vector) is a high-fidelity, temporally precise audio representation that encodes waveforms as sequences of dynamically fitted B-spline segments. It is designed for applications in neural network-based audio synthesis, recognition, transformation, and generative modeling. Unlike traditional PCM-based formats (e.g., WAV), LAV preserves the waveform's geometric structure and turning points, making it highly suitable for machine-native audio representation and manipulation.
+
+This format acts more like an "auditory vector drawing" than a rasterized waveform: it captures the essence of sound geometry in a scalable and interpretable way—ideal for building audio-native neural systems that learn directly from natural waveform flow.
+
+----------------------------------------------------
+ENCODING PROCESS
+----------------------------------------------------
+
+1. **Input**: 
+   - Standard PCM WAV file
+   - Mono channel required
+   - Sample rate: 44,100 Hz (1 point per sample)
+
+2. **Preprocessing**:
+   - Left channel is selected if stereo.
+   - The waveform is smoothed to reduce micro-noise and extract meaningful structure.
+   - Two smoothing options:
+     - **Savgol Filter** (`savgol`): Preserves peaks and transitions.
+     - **Exponential Moving Average** (`ema`): Smoother, inertia-like damping.
+
+3. **Turning Point Detection**:
+   - Local maxima and minima detected using `scipy.signal.argrelextrema`
+   - Ensures a full waveform outline by including [0] and [len-1] endpoints.
+
+4. **Segmentation**:
+   - Audio is divided between each pair of turning points.
+   - This creates segments of natural curvature.
+
+5. **Spline Fitting (Dynamic)**:
+   - Each segment is fitted using **least-squares B-spline fitting**:
+     - Degree = up to `SPLINE_DEGREE`
+     - Control Points = `NUM_CTRL_POINTS`
+   - If a segment is too short, the algorithm dynamically reduces the degree.
+   - If spline fitting fails, it falls back to linear fitting with raw points.
+
+6. **Vector Output**:
+   - Each segment results in a tuple:
+     - [coefficients], [knots], degree, length
+   - All tuples are saved in a `.lav` binary file.
+
+----------------------------------------------------
+DECODING / RECONSTRUCTION
+----------------------------------------------------
+
+1. **Load `.lav` file**:
+   - Read segment count.
+   - For each segment:
+     - Extract spline data.
+
+2. **Spline Evaluation**:
+   - Reconstruct segment using:
+     - `BSpline(knots, coeffs, degree)`
+   - Evaluate it across the recorded segment length.
+
+3. **Signal Reconstruction**:
+   - Recombine all spline-evaluated segments in order.
+   - This ensures perfect temporal integrity.
+
+4. **Normalization**:
+   - Final signal is normalized to `[-1, 1]`.
+
+5. **Output**:
+   - Can be saved as WAV or processed directly.
+
+----------------------------------------------------
+FORMAT STRUCTURE (.lav)
+----------------------------------------------------
+
+Binary layout:
+- [int32] number_of_segments
+
+For each segment:
+- [int32] num_coefficients
+- [int32] num_knots
+- [int32] spline_degree
+- [int32] segment_length
+- [float32 * num_coefficients] B-spline coefficients
+- [float32 * num_knots] knot vector
+
+All integers are 4-byte little-endian signed.
+All floats are 4-byte IEEE 754 little-endian.
+
+----------------------------------------------------
+SPLINE REPRESENTATION (Illustrative)
+----------------------------------------------------
+
+Each segment is modeled as a B-spline curve:
+
+Original waveform:
+```
+sample points:   ●    ●   ●     ●    ●  ●     ●
+                 |----|----|----|----|----|----| time →
+```
+
+Turning points (extrema):
+```
+                    ↑        ↑        ↑
+                 [min]    [max]     [min]
+```
+
+Fitted B-spline:
+```
+                    ◯--------◯------◯   ← smooth flow
+                 [coeff1]  [coeff2]  ...
+```
+
+- Knots define where control applies.
+- Degree controls smoothness (degree=3 = cubic).
+- The spline is only evaluated over the natural segment length.
+
+----------------------------------------------------
+ADVANTAGES FOR NEURAL AUDIO MODELS
+----------------------------------------------------
+
+1. **Temporal Integrity**: No padding, truncation, or downsampling. Every sample has a place.
+2. **Latent Structure**: Splines are an inherently compressed and interpretable signal.
+3. **Differentiability**: Spline math is compatible with gradient-based learning.
+4. **Compact**: File size is greatly reduced compared to WAV without perceptual quality loss.
+5. **Modular**: Ideal for chunk-wise streaming, attention models, and neural audio cells.
+
+----------------------------------------------------
+USE CASES
+----------------------------------------------------
+
+- Neural audio transformers and tokenizers
+- Latent speech synthesis
+- Procedural music generation
+- Rhythm and pattern learning in fractal networks
+- Real-time LLM audio interaction
+- Morphological wave analysis and hybridization
+- High-efficiency audio storage for AI agents
+
+----------------------------------------------------
+NOTES
+----------------------------------------------------
+
+- LAV is not a lossy codec in the traditional sense—its design goal is *audio vector interpretability*.
+- The smoothing method, spline degree, and number of control points affect fidelity and compression ratio.
+- Dynamic spline fallback ensures robustness even for minimal input.
+
+This format acts as a blueprint for audio neural cognition: signal-as-form rather than signal-as-data.
+
+----------------------------------------------------
+Usage example of LAV module 
+----------------------------------------------------
+
+in python:
+
+```python
+from lav.module import LAVProcessor
+import soundfile as sf
+
+# Create a processor with your desired settings:
+proc = LAVProcessor(
+    sample_rate     = 44100,
+    smooth_method   = 'savgol',    # or 'ema'
+    smooth_window   = 15,          # window length for savgol
+    smooth_poly     = 3,           # polynomial order for savgol
+    ema_alpha       = 0.1,         # only used if smooth_method='ema'
+    spline_degree   = 3,           # max spline degree
+    num_ctrl_points = 8            # max control points per segment
+)
+
+# Encode a WAV file:
+signal, sr = sf.read("examples/audioINPUT/word.wav")
+vectors   = proc.encode_from_array(signal, sr)
+proc.save_lav(vectors, "examples/audioVECTOR/word.lav")
+
+# Decode back to WAV:
+vectors2   = proc.load_lav("examples/audioVECTOR/word.lav")
+waveform2  = proc.decode_to_array(vectors2)
+sf.write("examples/audioOUTPUT/word_decoded.wav", waveform2, proc.sample_rate)
+```

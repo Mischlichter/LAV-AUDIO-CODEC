@@ -1,0 +1,55 @@
+EDUCATIONAL-FIRST LATENT AUDIO VECTOR LICENSE (EFLAV) v1.0
+----------------------------------------------------------------------
+Copyright (c) 2025 LAV Audio Project
+
+Definitions
+-----------
+“Software” means this LAV audio codec, including source, binaries,
+and documentation.
+
+“Educational Use” means use by individuals or institutions for
+teaching, learning, research, and academic distribution—without
+charge, tuition, or monetary consideration.
+
+“Commercial Use” means any use, distribution, or incorporation of
+the Software in products, services, or deployments where money,
+fees, royalties, or other consideration is charged or anticipated.
+
+License Grant
+-------------
+1. **Educational License**  
+   The Software is provided, royalty-free, to any person or
+   institution for Educational Use. You may use, copy, modify,
+   merge, publish, distribute, and sublicense the Software, provided
+   all copies retain this license.
+
+2. **Commercial License**  
+   Commercial Use of the Software is **prohibited** unless you have  
+   obtained a separate commercial license from the Licensor. For  
+   inquiries and terms, please open a GitHub issue under  
+   “commercial-licensing” or email: mischlichter@web.de
+
+Conditions
+----------
+- Any redistribution (source or binary) must include this license.
+- You may not remove, obscure, or alter any copyright notice
+  or this license text.
+
+Warranty & Liability
+--------------------
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+Acknowledgment
+--------------
+If you use the Software for published research, please cite:
+
+	“LAV Audio Project (Mischlichter, 2025)”
+
+----------------------------------------------------------------------
