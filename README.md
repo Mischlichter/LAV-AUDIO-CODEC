@@ -2,7 +2,7 @@
 
 # LAV Audio Codec
 
-A high-fidelity, temporally-precise audio format and toolkit for encoding and decoding audio as **Latent Audio Vectors** (`.lav`), plus a simple playback CLI.
+A Near-Hi-Fi, temporally-precise audio format and toolkit for encoding and decoding audio as **Latent Audio Vectors** (`.lav`), plus a simple playback CLI.
 
 ## Overview
 
