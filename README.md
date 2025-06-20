@@ -108,11 +108,4 @@ proc = LAVProcessor(
 )
 ```
 
-## Development & Contribution
 
-- Add tests under a `tests/` directory.  
-- Use `pytest` for testing.  
-- Update `setup.py` / `pyproject.toml` and bump version before release.  
-- Open issues or pull requests on GitHub.
-
----
