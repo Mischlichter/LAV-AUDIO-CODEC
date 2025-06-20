@@ -2,7 +2,7 @@
 
 # LAV Audio Codec
 
-A Near-Hi-Fi, temporally-precise audio format and toolkit for encoding and decoding audio as **Latent Audio Vectors** (`.lav`), plus a simple playback CLI.
+A high-fidelity, temporally-precise audio format and toolkit for encoding and decoding audio as **Latent Audio Vectors** (`.lav`), plus a simple playback CLI.
 
 ## Overview
 
@@ -37,21 +37,22 @@ LAV transforms raw waveforms into sequences of dynamically-fitted B-spline segme
 ## Directory Structure
 
 ```
-audio-lav/
+LAV-AUDIO-CODEC/
 ├── LICENSE
+├── LAV-CODEC-INFO.txt
 ├── README.md
 ├── requirements.txt
 ├── examples/
-│   ├── audioINPUT/             # Place source .wav files here
-│   ├── audioVECTOR/            # Encoded .lav outputs
-│   └── audioOUTPUT/            # Decoded .wav outputs
+│   ├── audioINPUT/            # source .wav files
+│   ├── audioVECTOR/           # encoded .lav files
+│   └── audioOUTPUT/           # decoded .wav files
 └── src/
     └── lav/
         ├── __init__.py
-        ├── LAV_module.py       # Core LAVProcessor class
-        ├── encode.py           # CLI: `lav-encode`
-        ├── decode.py           # CLI: `lav-decode`
-        └── radio.py            # CLI: `lav-radio`
+        ├── encode.py          # CLI: lav-encode
+        ├── decode.py          # CLI: lav-decode
+        ├── player.py          # CLI: lav-radio
+        └── module.py          # LAVProcessor core
 ```
 
 ## CLI Usage
@@ -97,7 +98,7 @@ lav-radio --dir examples/audioVECTOR
 Adjust any default behavior via CLI flags or by instantiating `LAVProcessor` in code:
 
 ```python
-from lav.LAV_module import LAVProcessor
+from lav.module import LAVProcessor
 proc = LAVProcessor(
     smooth_method='ema',
     smooth_window=21,
@@ -107,5 +108,7 @@ proc = LAVProcessor(
     num_ctrl_points=12
 )
 ```
+
+
 
 
