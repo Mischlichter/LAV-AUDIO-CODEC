@@ -118,7 +118,6 @@ ADVANTAGES FOR NEURAL AUDIO MODELS
 1. **Temporal Integrity**: No padding, truncation, or downsampling. Every sample has a place.
 2. **Latent Structure**: Splines are an inherently compressed and interpretable signal.
 3. **Differentiability**: Spline math is compatible with gradient-based learning.
-4. **Compact**: File size is greatly reduced compared to WAV without perceptual quality loss.
 5. **Modular**: Ideal for chunk-wise streaming, attention models, and neural audio cells.
 
 ----------------------------------------------------
