@@ -49,9 +49,9 @@ LAV-AUDIO-CODEC/
 └── src/
     └── lav/
         ├── __init__.py
-        ├── encode.py          # CLI: lav-encode
-        ├── decode.py          # CLI: lav-decode
-        ├── player.py          # CLI: lav-radio
+        ├── lav-encode.py          # CLI: lav-encode
+        ├── lav-decode.py          # CLI: lav-decode
+        ├── lav-player.py          # CLI: lav-radio
         └── module.py          # LAVProcessor core
 ```
 
@@ -88,7 +88,7 @@ lav-decode \
 ### 3. Interactive Playback
 
 ```bash
-lav-radio --dir examples/audioVECTOR
+lav-player --dir examples/audioVECTOR
 ```
 
 - Lists all `.lav` files and plays the selected one at 44.1 kHz.
