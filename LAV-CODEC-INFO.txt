@@ -36,10 +36,16 @@ ENCODING PROCESS
    - If a segment is too short, the algorithm dynamically reduces the degree.
    - If spline fitting fails, it falls back to linear fitting with raw points.
 
-6. **Vector Output**:
+6. **Alternative: Fixed Knot Grid Fitting**:
+   - In this mode, the spline segments are evaluated on a **constant time grid** defined by `--hz` (e.g. 11025 Hz).
+   - This method is ideal for **consistent time-aligned vector encoding**, enabling clean mixing, morphing, and learning across signals of different lengths.
+   - Geometry is preserved while enforcing uniform sampling density.
+
+7. **Vector Output**:
    - Each segment results in a tuple:
      - [coefficients], [knots], degree, length
    - All tuples are saved in a `.lav` binary file.
+
 
 ----------------------------------------------------
 DECODING / RECONSTRUCTION
