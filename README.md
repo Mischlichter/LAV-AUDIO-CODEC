@@ -109,10 +109,9 @@ proc = LAVProcessor(
 )
 ```
 
-4. Encode WAV → LAV (Fixed Knot Grid)
+### 4. Encode WAV → LAV (Fixed Knot Grid)
 
-Use this if you want to force a constant knot rate across all segments, e.g., for compatibility with mixing or uniform analysis.
-
+```bash
 lav-encode-constant \
   --in examples/audioINPUT \
   --out examples/audioVECTOR \
@@ -120,14 +119,29 @@ lav-encode-constant \
   --method savgol \
   --degree 3 \
   --ctrl 8
+```
 
-    --hz: Target evaluation grid frequency (e.g. 11025 for 1/4 of 44.1kHz)
+- `--in`: WAV input directory  
+- `--out`: Output `.lav` vector directory  
+- `--hz`: Target evaluation grid frequency (e.g. `11025` for 1/4 of 44.1kHz)  
+- `--method`: smoothing method (`savgol` or `ema`)  
+- `--degree`: maximum spline degree  
+- `--ctrl`: maximum control points per segment  
 
-    --in: WAV input directory
+> This encoder outputs `.lav` files with **uniform temporal spacing between knot samples** – ideal for vector operations like crossfading or morphing.
 
-    --out: Output .lav vector directory
+## Configuration
 
-    All other arguments behave the same as in lav-encode
+Adjust any default behavior via CLI flags or by instantiating `LAVProcessor` in code:
 
-    This encoder outputs .lav files with uniform temporal spacing between knot samples – ideal for vector operations like crossfading or morphing.
-
+```python
+from lav.module import LAVProcessor
+proc = LAVProcessor(
+    smooth_method='ema',
+    smooth_window=21,
+    smooth_poly=2,
+    ema_alpha=0.2,
+    spline_degree=4,
+    num_ctrl_points=12
+)
+```
