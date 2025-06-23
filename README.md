@@ -109,6 +109,25 @@ proc = LAVProcessor(
 )
 ```
 
+4. Encode WAV → LAV (Fixed Knot Grid)
 
+Use this if you want to force a constant knot rate across all segments, e.g., for compatibility with mixing or uniform analysis.
 
+lav-encode-constant \
+  --in examples/audioINPUT \
+  --out examples/audioVECTOR \
+  --hz 11025 \
+  --method savgol \
+  --degree 3 \
+  --ctrl 8
+
+    --hz: Target evaluation grid frequency (e.g. 11025 for 1/4 of 44.1kHz)
+
+    --in: WAV input directory
+
+    --out: Output .lav vector directory
+
+    All other arguments behave the same as in lav-encode
+
+    This encoder outputs .lav files with uniform temporal spacing between knot samples – ideal for vector operations like crossfading or morphing.
 

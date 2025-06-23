@@ -116,3 +116,30 @@ class LAVProcessor:
                 knots = np.frombuffer(f.read(4 * len_knots), dtype=np.float32)
                 vectors.append((coeffs, knots, degree, length))
         return vectors
+
+    def fit_to_constant_grid(self, signal, grid_spacing_samples=2, degree=3):
+        length = len(signal)
+        if length < degree + 1:
+            raise ValueError("Signal too short for specified spline degree.")
+
+        # Fixed knot interval in samples
+        num_knots = int(length / grid_spacing_samples) + degree * 2
+        knot_positions = np.linspace(0, 1, num_knots - degree * 2)
+        knots = np.concatenate([
+            np.zeros(degree),
+            knot_positions,
+            np.ones(degree)
+        ])
+
+        x = np.linspace(0, 1, length)
+
+        try:
+            spline = make_lsq_spline(x, signal, knots, degree)
+            coeffs = spline.c
+            return [(coeffs, knots, degree, length)]
+        except Exception as e:
+            # Fall back to linear
+            degree = 1
+            knots = np.array([0.0, 1.0], dtype=np.float32)
+            coeffs = signal.astype(np.float32)
+            return [(coeffs, knots, degree, length)]
